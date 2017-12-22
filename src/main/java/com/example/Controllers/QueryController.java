@@ -3,6 +3,8 @@ package com.example.Controllers;
 import ch.qos.logback.classic.spi.LoggerRemoteView;
 import com.example.DataFetcher.AllPeopleDataFetcher;
 import com.example.DataFetcher.PersonDataFetcher;
+import com.example.Models.Person;
+import com.example.Repository.PersonRepository;
 import graphql.ExecutionResult;
 import graphql.GraphQL;
 import graphql.schema.DataFetcher;
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 //import static com.sun.xml.internal.ws.spi.db.BindingContextFactory.LOGGER;
 import static graphql.GraphQL.*;
@@ -35,6 +38,9 @@ public class QueryController {
     private Resource schemaResource;
 
     private GraphQL graphQL;
+
+    @Autowired
+    private PersonRepository personRepository;
 
     @Autowired
     private AllPeopleDataFetcher allPeopleDataFetcher;
@@ -67,5 +73,9 @@ public class QueryController {
         return ResponseEntity.ok(result.getData());
     }
 
+    @RequestMapping(value = "/persons", method = RequestMethod.GET)
+    public List<Person> getPersons(){
+        return personRepository.findAll();
+    }
 
 }
